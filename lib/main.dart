@@ -19,7 +19,7 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> {
   // #region Theme Variables
-  ThemeMode _themeMode = ThemeMode.light;
+  ThemeMode _themeMode = ThemeMode.dark;
   bool get isthemeLight {
     return _themeMode == ThemeMode.light;
   }
@@ -43,7 +43,7 @@ class MyAppState extends State<MyApp> {
       darkTheme: darkTheme,
       themeMode: _themeMode,
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: const Home(),
     );
   }
 }

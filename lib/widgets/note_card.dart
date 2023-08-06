@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notis/screens/note_edit.dart';
 
 import '../models/note.dart';
 
@@ -24,7 +25,10 @@ class NoteCardView extends StatelessWidget {
               child: Material(
             type: MaterialType.transparency,
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                //Open note edit page
+                Navigator.push(context, routeBuilder());
+              },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -57,6 +61,26 @@ class NoteCardView extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  PageRouteBuilder<dynamic> routeBuilder() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          const NoteEditPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+        final tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        final offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
+      },
     );
   }
 }

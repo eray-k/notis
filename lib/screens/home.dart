@@ -40,15 +40,14 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         //Menu
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.menu,
-            color: Theme.of(context).colorScheme.primary,
           ),
           onPressed: () {
             //TODO: PopUp Slide Menu
           },
         ),
-        
+
         //Settings
         actions: [
           //TODO: Theme goes to settings screen and settings button replaces here
