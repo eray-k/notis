@@ -27,7 +27,9 @@ class NoteCardView extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 //Open note edit page
-                Navigator.push(context, routeBuilder());
+                Future.delayed(const Duration(milliseconds: 100), () {
+                  Navigator.push(context, routeBuilder());
+                });
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -36,7 +38,7 @@ class NoteCardView extends StatelessWidget {
                   children: [
                     Text(note.name,
                         style: Theme.of(context).textTheme.titleMedium),
-                    if (note.content.isEmpty)
+                    if (note.content.isNotEmpty)
                       Text(note.content,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
@@ -67,7 +69,7 @@ class NoteCardView extends StatelessWidget {
   PageRouteBuilder<dynamic> routeBuilder() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
-          const NoteEditPage(),
+          NoteEditPage(currentNote: note,),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);
         const end = Offset.zero;
