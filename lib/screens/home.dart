@@ -13,15 +13,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late final DataManager dataManager;
+
   @override
   void initState() {
     super.initState();
     dataManager = DataManager.instance;
-    dataManager.readNotes().then((value) {
-      setState(() {
-        notes = value.notes;
-      });
-    });
   }
 
   List<Note> notes = List.empty(growable: true);
@@ -53,9 +49,11 @@ class _HomeState extends State<Home> {
           //TODO: Theme goes to settings screen and settings button replaces here
           IconButton(
               onPressed: () {
-                MyApp.of(context).toggleTheme();
+                setState(() {
+                  MyApp.of(context).toggleThemeMode();
+                });
               },
-              icon: Icon(MyApp.of(context).isthemeLight
+              icon: Icon(MyApp.of(context).themeMode == ThemeMode.light
                   ? Icons.light_mode
                   : Icons.dark_mode))
         ],
@@ -63,7 +61,7 @@ class _HomeState extends State<Home> {
       body: noteListView(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          dataManager.writeNotes(NoteList(notes));
+          //dataManager.writeNotes(NoteList(notes));
         },
         child: const Icon(Icons.add),
       ),
