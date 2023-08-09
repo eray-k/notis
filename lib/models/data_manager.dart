@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:notis/models/settings.dart';
 import 'package:path_provider/path_provider.dart';
@@ -8,15 +9,19 @@ import 'package:path_provider/path_provider.dart';
 /// Save / Load Manager class.
 class DataManager {
   //IMPLEMENT: Save/load each note seperately.
-  Settings settings = Settings(themeMode: 0);
+  Settings settings = Settings(themeMode: 1);
 
   static DataManager instance = DataManager();
 
-  ThemeMode themeMode = ThemeMode.light;
   String path = '';
   bool initialized = false;
+
   Future<String> init() async {
     if (initialized) return path;
+
+    if (kDebugMode) {
+      print('Initializing Data Manager...');
+    }
     initialized = true;
     final directory = await getApplicationDocumentsDirectory();
     path = directory.path;
@@ -28,44 +33,38 @@ class DataManager {
 
   File _localFile(String additionalPath) {
     final file = File('$path/$additionalPath');
-    if (file.existsSync()) file.create(recursive: true);
+    if (!file.existsSync()) {
+      if (kDebugMode) {
+        print('Created file: ${file.path}');
+      }
+      file.create(recursive: true);
+    }
     return file;
   }
 
-  void saveSettings() {
+  void saveSettings() async {
     final file = _localFile('settings.txt');
-    print("Saving...");
-    file.writeAsString(jsonEncode(settings));
+    await file.writeAsString(jsonEncode(settings));
   }
 
   ///Always
   Future<Settings> loadSettings() async {
     final file = _localFile('settings.txt');
     final encodedJson = await file.readAsString();
-    if (encodedJson == "") saveSettings();
+    if (encodedJson == "") {
+      saveSettings();
+    }
     final decodedJson = jsonDecode(encodedJson);
     settings = Settings(themeMode: decodedJson['themeMode']);
-    print(settings);
     return settings;
   }
 
-/*
-  Future<File> writeNotes(NoteList noteList) async {
-    final file = await _localFile;
-    return file.writeAsString(jsonEncode(noteList));
-  }
-
-  Future<NoteList> readNotes() async {
-    final file = await _localFile;
-    final encodedJson = await file.readAsString();
-    final Map<String, dynamic> decodedJson = jsonDecode(encodedJson);
-    List<dynamic> decodedNotes = decodedJson['notes'];
-    decodedNotes.map((e) => jsonDecode(e));
-    List<Note> notes = List.empty(growable: true);
-    for (var e in decodedNotes) {
-      notes.add(Note(name: e['name'], content: e['content']));
+  //#region DEBUG METHODS
+  void debugPrintSettings() {
+    final ThemeMode theme = settings.getThemeMode();
+    if (kDebugMode) {
+      print('-----\nTheme: $theme\n-----');
     }
-    return NoteList(notes);
   }
-*/
+  //#end region
 }

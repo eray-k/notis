@@ -53,7 +53,7 @@ class _HomeState extends State<Home> {
                   MyApp.of(context).toggleThemeMode();
                 });
               },
-              icon: Icon(MyApp.of(context).themeMode == ThemeMode.light
+              icon: Icon(dataManager.settings.getThemeMode() == ThemeMode.light
                   ? Icons.light_mode
                   : Icons.dark_mode))
         ],

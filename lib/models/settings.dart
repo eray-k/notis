@@ -4,22 +4,21 @@ import 'package:flutter/material.dart';
 ///[themeMode] ==> 0=light, 1=dark, 2=system
 ///
 class Settings {
-  //Delete themeMode
   Settings({
-    int themeMode = 0,
+    required this.themeMode,
   });
-  int themeMode = 0;
+  int themeMode;
   set setThemeMode(ThemeMode newThemeMode) {
     switch (newThemeMode) {
       case ThemeMode.light:
         themeMode = 0;
-        return;
+        break;
       case ThemeMode.dark:
         themeMode = 1;
-        return;
+        break;
       case ThemeMode.system:
         themeMode = 2;
-        return;
+        break;
     }
   }
 

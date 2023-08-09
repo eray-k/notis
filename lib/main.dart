@@ -2,28 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:notis/models/data_manager.dart';
 import 'package:notis/screens/home.dart';
 import 'package:notis/themes.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'models/settings.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
-  late final int _theme;
-  _theme = prefs.getInt(
-        'theme',
-      ) ??
-      0;
+  final DataManager dataManager = DataManager.instance;
+  await dataManager.init();
+  final Settings settings = dataManager.settings;
+  dataManager.debugPrintSettings();
 
   runApp(MyApp(
-    themeNo: _theme,
-    prefs: prefs,
+    settings: settings,
   ));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key, required this.themeNo, required this.prefs});
-  final int themeNo;
+  const MyApp({super.key, required this.settings});
 
-  final SharedPreferences prefs;
+  final Settings settings;
   @override
   State<MyApp> createState() => MyAppState();
 
@@ -34,29 +31,17 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> {
   late final DataManager dataManager;
-  ThemeMode themeMode = ThemeMode.light;
-  void toggleThemeMode() {
+
+  Future<void> toggleThemeMode() async {
     setState(() {
-      if (themeMode == ThemeMode.light) {
-        themeMode = ThemeMode.dark;
-        widget.prefs.setInt('theme', 1);
-      } else if (themeMode == ThemeMode.dark) {
-        themeMode = ThemeMode.light;
-        widget.prefs.setInt('theme', 0);
-      }
+      dataManager.settings.toggleThemeMode();
+      dataManager.saveSettings();
     });
   }
 
   @override
   void initState() {
     dataManager = DataManager.instance;
-    if (widget.themeNo == 0) {
-      themeMode = ThemeMode.light;
-    } else if (widget.themeNo == 1) {
-      themeMode = ThemeMode.dark;
-    } else if (widget.themeNo == 2) {
-      themeMode = ThemeMode.system;
-    }
     super.initState();
   }
 
@@ -66,7 +51,7 @@ class MyAppState extends State<MyApp> {
       title: 'Notis',
       theme: lightTheme,
       darkTheme: darkTheme,
-      themeMode: themeMode,
+      themeMode: dataManager.settings.getThemeMode(),
       debugShowCheckedModeBanner: false,
       home: const Home(),
     );
