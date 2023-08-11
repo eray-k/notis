@@ -8,68 +8,32 @@ class NoteCardView extends StatelessWidget {
   final Note note;
 
   @override
-  Widget build(BuildContext context) {
-    //TODO: Use ListTile Widget
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      width: double.infinity,
-      height: 75,
-      margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-      decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(12.0)),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Expanded(
-              child: Material(
-            type: MaterialType.transparency,
-            child: InkWell(
-              onTap: () {
-                //Open note edit page
-                Future.delayed(const Duration(milliseconds: 100), () {
-                  Navigator.push(context, routeBuilder());
-                });
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(note.name,
-                        style: Theme.of(context).textTheme.titleMedium),
-                    if (note.content.isNotEmpty)
-                      Text(note.content,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          style: Theme.of(context).textTheme.bodySmall),
-                  ],
-                ),
-              ),
-            ),
-          )),
-          Material(
-            type: MaterialType.transparency,
-            child: InkWell(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Ink(child: const Icon(Icons.info_outline)),
-              ),
-              onTap: () {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(const SnackBar(content: Text('Note Title')));
-              },
-            ),
-          )
-        ],
+  Widget build(BuildContext context) {  
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+      child: ListTile(
+        title: Text(note.name),
+        titleTextStyle: Theme.of(context).textTheme.titleMedium,
+        tileColor: Theme.of(context).colorScheme.secondaryContainer,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+        onTap: () {
+          //Open note edit page
+          Future.delayed(const Duration(milliseconds: 100), () {
+            Navigator.of(context).push(routeBuilder());
+          });
+        },
+        trailing:
+            IconButton(onPressed: () {}, icon: const Icon(Icons.more_horiz)),
       ),
     );
   }
 
   PageRouteBuilder<dynamic> routeBuilder() {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          NoteEditPage(currentNote: note,),
+      pageBuilder: (context, animation, secondaryAnimation) => NoteEditPage(
+        currentNote: note,
+      ),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);
         const end = Offset.zero;

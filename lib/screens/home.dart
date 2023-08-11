@@ -20,8 +20,6 @@ class _HomeState extends State<Home> {
     dataManager = DataManager.instance;
   }
 
-  List<Note> notes = List.empty(growable: true);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,29 +56,42 @@ class _HomeState extends State<Home> {
                   : Icons.dark_mode))
         ],
       ),
-      body: noteListView(),
+      body: FutureBuilder<List<Note>>(
+        future: dataManager.loadNotes(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return noteListView(snapshot.data ?? List.empty());
+          } else if (snapshot.hasError) {
+            return Text('Error!: ${snapshot.error}');
+          } else {
+            return const Center(child: CircularProgressIndicator(),);
+          }
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          //dataManager.writeNotes(NoteList(notes));
+          dataManager.saveNote(Note(name: 'aaa'));
         },
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  ListView noteListView() {
-    return ListView.separated(
+  ListView noteListView(List<Note> notes) {
+    return ListView.builder(
       itemCount: notes.length,
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       itemBuilder: (context, index) {
         return NoteCardView(note: notes[index]);
       },
+      /*
       separatorBuilder: (context, index) {
         return const Divider(
           indent: 24,
           endIndent: 96,
         );
       },
+      */
     );
   }
 }

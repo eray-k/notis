@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:notis/models/data_manager.dart';
+import 'package:notis/util/util.dart' as util;
 
 import '../models/note.dart';
 
@@ -11,14 +13,21 @@ class NoteEditPage extends StatefulWidget {
 
 class _NoteEditPageState extends State<NoteEditPage> {
   final TextEditingController _controller = TextEditingController();
+  late final DataManager _dataManager;
+  bool saved = true;
   @override
   void initState() {
-    _controller.text = widget.currentNote.content;
+    _dataManager = DataManager.instance;
+    _dataManager.loadNoteContent(widget.currentNote).then((value) {
+      _controller.text = value.content;
+    });
     super.initState();
   }
 
   @override
   void dispose() {
+    widget.currentNote.content = _controller.text;
+    _dataManager.saveNote(widget.currentNote);
     _controller.dispose();
     super.dispose();
   }
@@ -27,11 +36,55 @@ class _NoteEditPageState extends State<NoteEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.currentNote.name),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: saved
+              ? () {
+                  Navigator.pop(context);
+                }
+              : null,
+        ),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            //TODO: Center title, not row
+            Text(widget.currentNote.name),
+            const SizedBox(width: 4),
+            saved
+                ? const Icon(Icons.check)
+                : SizedBox(
+                    width: 24.0,
+                    height: 24.0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.0,
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
+                    ),
+                  ),
+          ],
+        ),
         centerTitle: true,
       ),
       body: TextField(
         controller: _controller,
+        onChanged: (val) {
+          setState(() {
+            saved = false;
+          });
+          if (!_dataManager.settings.enableAutoSave) return;
+          widget.currentNote.content = _controller.text;
+          util.debounce(const Duration(seconds: 1), 'save-note',() async {
+            await _dataManager.saveNote(widget.currentNote);
+            try {
+              setState(() {
+                saved = true;
+              });
+            } catch (e) {}
+            ;
+          });
+        },
         //style: TextStyle(),
         decoration: const InputDecoration(
           border: InputBorder.none,
@@ -42,13 +95,12 @@ class _NoteEditPageState extends State<NoteEditPage> {
         showCursor: true,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _controller.text =
-                "a\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\n";
-          });
+        onPressed: () async {
+          widget.currentNote.content = _controller.text;
+          await _dataManager.saveNote(widget.currentNote);
+          saved = true;
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.save),
       ),
     );
   }

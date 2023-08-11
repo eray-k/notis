@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 class Settings {
   Settings({
     required this.themeMode,
+    required this.enableAutoSave
   });
   int themeMode;
+  bool enableAutoSave;
   set setThemeMode(ThemeMode newThemeMode) {
     switch (newThemeMode) {
       case ThemeMode.light:
@@ -48,7 +50,7 @@ class Settings {
     }
   }
 
-  Settings.fromJson(Map<String, dynamic> json) : themeMode = json['themeMode'];
+  Settings.fromJson(Map<String, dynamic> json) : themeMode = json['themeMode'],enableAutoSave = json['enableAutoSave'];
 
-  Map<String, dynamic> toJson() => {'themeMode': themeMode};
+  Map<String, dynamic> toJson() => {'themeMode': themeMode, 'enableAutoSave':enableAutoSave};
 }

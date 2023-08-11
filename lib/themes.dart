@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 ThemeData lightTheme = ThemeData(
   useMaterial3: true,
   colorScheme: _ligthScheme,
+  iconButtonTheme: IconButtonThemeData(style: ButtonStyle(iconColor: MaterialStatePropertyAll(_ligthScheme.primary)))
 );
 
 ThemeData darkTheme = ThemeData(

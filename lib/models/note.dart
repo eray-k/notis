@@ -1,6 +1,5 @@
 /// Main Note model
 // ignore_for_file: file_names
-
 class Note {
   String name;
   String content;
@@ -18,17 +17,5 @@ class Note {
   Map<String, dynamic> toJson() => {
         'name': name,
         'content': content,
-      };
-}
-
-class NoteList {
-  final List<Note> notes;
-
-  NoteList(this.notes);
-
-  NoteList.fromJson(Map<String, dynamic> json) : notes = json['notes'];
-
-  Map<String, dynamic> toJson() => {
-        'notes': notes,
       };
 }
