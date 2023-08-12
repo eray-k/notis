@@ -84,14 +84,6 @@ class _HomeState extends State<Home> {
       itemBuilder: (context, index) {
         return NoteCardView(note: notes[index]);
       },
-      /*
-      separatorBuilder: (context, index) {
-        return const Divider(
-          indent: 24,
-          endIndent: 96,
-        );
-      },
-      */
     );
   }
 }

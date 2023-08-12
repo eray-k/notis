@@ -75,14 +75,13 @@ class _NoteEditPageState extends State<NoteEditPage> {
           });
           if (!_dataManager.settings.enableAutoSave) return;
           widget.currentNote.content = _controller.text;
-          util.debounce(const Duration(seconds: 1), 'save-note',() async {
+          util.debounce(const Duration(seconds: 1), 'save-note', () async {
             await _dataManager.saveNote(widget.currentNote);
             try {
               setState(() {
                 saved = true;
               });
             } catch (e) {}
-            ;
           });
         },
         //style: TextStyle(),

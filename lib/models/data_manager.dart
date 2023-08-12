@@ -72,7 +72,6 @@ class DataManager {
   Future<void> saveNote(Note note) async {
     final file = _localFile("${note.name}.md");
     await file.writeAsString(jsonEncode(note));
-    print('Note saved: ${jsonEncode(note)}');
   }
 
   Future<List<Note>> loadNotes() async {

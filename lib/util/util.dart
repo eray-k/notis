@@ -25,7 +25,6 @@ void debounce(Duration timeout, String processName, Function target,
 
   Timer timer = Timer(timeout, () {
     Function.apply(target, arguments);
-    print(_timeouts);
   });
 
   _timeouts.add(_Process(processName, target, timer));
