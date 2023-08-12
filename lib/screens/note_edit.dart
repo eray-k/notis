@@ -19,7 +19,11 @@ class _NoteEditPageState extends State<NoteEditPage> {
   void initState() {
     _dataManager = DataManager.instance;
     _dataManager.loadNoteContent(widget.currentNote).then((value) {
-      _controller.text = value.content;
+      _controller.value = TextEditingValue(
+        text: value.content,
+        selection: TextSelection.fromPosition(TextPosition(offset: value.content.length)),
+      ) ;
+
     });
     super.initState();
   }
@@ -92,6 +96,7 @@ class _NoteEditPageState extends State<NoteEditPage> {
         maxLines: null,
         keyboardType: TextInputType.multiline,
         showCursor: true,
+        autofocus: true,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -101,6 +106,7 @@ class _NoteEditPageState extends State<NoteEditPage> {
         },
         child: const Icon(Icons.save),
       ),
+      
     );
   }
 }
