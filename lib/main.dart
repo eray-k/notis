@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notis/models/data_manager.dart';
 import 'package:notis/screens/home.dart';
-import 'package:notis/themes.dart';
+import 'package:notis/util/themes.dart';
 
 import 'models/settings.dart';
 

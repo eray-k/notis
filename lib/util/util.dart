@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+
 //#region Debounce
 class _Process {
   final String name;
@@ -8,6 +10,7 @@ class _Process {
 
   _Process(this.name, this.target, this.timer);
 }
+
 List<_Process> _timeouts = List.empty(growable: true);
 List<void Function()> _pendingRemovals = List.empty(growable: true);
 
@@ -35,4 +38,9 @@ void debounce(Duration timeout, String processName, Function target,
 }
 //#endregion
 
-
+SizedBox addVerticaLSpace(double spaceHeight) {
+  return SizedBox(height: spaceHeight);
+}
+SizedBox addHorizontalSpace(double spaceWidth) {
+  return SizedBox(width: spaceWidth);
+}
