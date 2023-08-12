@@ -16,31 +16,30 @@ class CustomPopUp extends StatefulWidget {
 class _CustomPopUpState extends State<CustomPopUp> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: <Widget>[
-          Text(
-            widget.title,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          ListView.builder(
-              itemCount: widget.options.length,
-              itemBuilder: (context, index) {
-                return RadioListTile.adaptive(
-                  value: widget.options[index],
-                  groupValue: widget.selected,
-                  title: Text(widget.options[index]),
-                  onChanged: (String? value) {
-                    setState(() {
-                      final val = value ?? '';
-                      if (val.isNotEmpty) {
-                        Navigator.pop(context,val);
-                      }
-                    });
-                  },
-                );
-              })
-        ],
+    return AlertDialog(
+      title: Text(
+        widget.title,
+        style: Theme.of(context).textTheme.headlineSmall,
+      ),
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(
+            maxHeight: 300.0, maxWidth: 250.0, minWidth: 144.0),
+        child: ListView.builder(
+            itemCount: widget.options.length,
+            itemBuilder: (context, index) {
+              //BUG: Radio cant be selected when it is already selected.
+              return RadioListTile.adaptive(
+                value: widget.options[index],
+                groupValue: widget.selected,
+                title: Text(widget.options[index]),
+                onChanged: (String? value) {
+                  final val = value ?? '';
+                  if (val.isNotEmpty) {
+                    Navigator.pop(context, val);
+                  }
+                },
+              );
+            }),
       ),
     );
   }

@@ -38,9 +38,15 @@ void debounce(Duration timeout, String processName, Function target,
 }
 //#endregion
 
+/// Only use with unique values!
+dynamic getKeyfromValue(Map map, dynamic value) {
+  return map.keys.firstWhere(((e) => map[e] == value));
+}
+
 SizedBox addVerticaLSpace(double spaceHeight) {
   return SizedBox(height: spaceHeight);
 }
+
 SizedBox addHorizontalSpace(double spaceWidth) {
   return SizedBox(width: spaceWidth);
 }

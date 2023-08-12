@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 
+const Map<String, dynamic> themeMap = {
+  'Light': ThemeMode.light,
+  'Dark': ThemeMode.dark,
+  'System': ThemeMode.system
+};
+
+
 ///For all settings
 ///[themeMode] ==> 0=light, 1=dark, 2=system
 ///
 class Settings {
-  Settings({
-    required this.themeMode,
-    required this.enableAutoSave
-  });
+  Settings({required this.themeMode, required this.enableAutoSave});
   int themeMode;
   bool enableAutoSave;
+  
   set setThemeMode(ThemeMode newThemeMode) {
     switch (newThemeMode) {
       case ThemeMode.light:
@@ -36,21 +41,10 @@ class Settings {
     throw Exception('Set theme mode to 0,1,2');
   }
 
-  /// DO NOT use with [ThemeMode.system]
-  void toggleThemeMode() {
-    switch (themeMode) {
-      case 0:
-        themeMode = 1;
-      case 1:
-        themeMode = 0;
-      case 2:
-        themeMode = 2;
-      default:
-        throw Exception('Set theme mode to 0,1,2');
-    }
-  }
+  Settings.fromJson(Map<String, dynamic> json)
+      : themeMode = json['themeMode'],
+        enableAutoSave = json['enableAutoSave'];
 
-  Settings.fromJson(Map<String, dynamic> json) : themeMode = json['themeMode'],enableAutoSave = json['enableAutoSave'];
-
-  Map<String, dynamic> toJson() => {'themeMode': themeMode, 'enableAutoSave':enableAutoSave};
+  Map<String, dynamic> toJson() =>
+      {'themeMode': themeMode, 'enableAutoSave': enableAutoSave};
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:notis/main.dart';
 import 'package:notis/models/data_manager.dart';
+import 'package:notis/screens/settings_page.dart';
 import '../models/note.dart';
 import '../widgets/note_card.dart';
 
@@ -44,16 +44,15 @@ class _HomeState extends State<Home> {
 
         //Settings
         actions: [
-          //TODO: Theme goes to settings screen and settings button replaces here
           IconButton(
               onPressed: () {
-                setState(() {
-                  MyApp.of(context).toggleThemeMode();
-                });
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsPage(),
+                    ));
               },
-              icon: Icon(dataManager.settings.getThemeMode() == ThemeMode.light
-                  ? Icons.light_mode
-                  : Icons.dark_mode))
+              icon: const Icon(Icons.settings))
         ],
       ),
       body: FutureBuilder<List<Note>>(
@@ -64,7 +63,9 @@ class _HomeState extends State<Home> {
           } else if (snapshot.hasError) {
             return Text('Error!: ${snapshot.error}');
           } else {
-            return const Center(child: CircularProgressIndicator(),);
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
         },
       ),

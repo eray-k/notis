@@ -32,9 +32,9 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   late final DataManager dataManager;
 
-  Future<void> toggleThemeMode() async {
+  Future<void> setThemeMode(ThemeMode themeMode) async {
     setState(() {
-      dataManager.settings.toggleThemeMode();
+      dataManager.settings.setThemeMode = themeMode;
       dataManager.saveSettings();
     });
   }
