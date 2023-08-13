@@ -28,7 +28,7 @@ class _SettingsPageState extends State<SettingsPage> {
           'Settings',
           style: Theme.of(context)
               .textTheme
-              .headlineLarge
+              .headlineMedium
               ?.copyWith(color: Theme.of(context).colorScheme.primary),
         ),
       ),
