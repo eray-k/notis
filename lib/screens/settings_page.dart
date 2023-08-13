@@ -38,15 +38,28 @@ class _SettingsPageState extends State<SettingsPage> {
           //Visuals
           Card(
               margin: const EdgeInsets.all(16.0),
-              child: selectableRow(
-                context,
-                title: 'Theme',
-                current: getKeyfromValue(
-                    themeMap, _dataManager.settings.getThemeMode()),
-                values: themeMap,
-                onSubmit: (value) {
-                  MyApp.of(context).setThemeMode(themeMap[value]);
-                },
+              child: Column(
+                children: [
+                  selectableRow(
+                    context,
+                    title: 'Theme',
+                    current: getKeyfromValue(
+                        themeMap, _dataManager.settings.getThemeMode()),
+                    values: themeMap,
+                    onSubmit: (value) {
+                      MyApp.of(context).setThemeMode(themeMap[value]);
+                    },
+                  ),
+                  switchableRow(context,
+                      title: 'Auto Save',
+                      current: _dataManager.settings.enableAutoSave,
+                      onChange: (value) {
+                    setState(() {
+                      _dataManager.settings.enableAutoSave = value;
+                      _dataManager.saveSettings();
+                    });
+                  })
+                ],
               )),
         ],
       ),
@@ -101,6 +114,41 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
         ),
+      ],
+    );
+  }
+
+  Row switchableRow(BuildContext context,
+      {required String title,
+      required bool current,
+      required Function(bool value) onChange}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Text(
+              title,
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            width: 96.0,
+            child: Center(
+              child: Switch.adaptive(
+                  value: current,
+                  onChanged: ((value) {
+                    current = value;
+                    onChange(value);
+                  })),
+            ),
+          ),
+        )
       ],
     );
   }
