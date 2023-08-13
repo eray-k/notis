@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notis/models/data_manager.dart';
 import 'package:notis/screens/home.dart';
-import 'package:notis/themes.dart';
+import 'package:notis/util/themes.dart';
 
 import 'models/settings.dart';
 
@@ -32,9 +32,9 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   late final DataManager dataManager;
 
-  Future<void> toggleThemeMode() async {
+  Future<void> setThemeMode(ThemeMode themeMode) async {
     setState(() {
-      dataManager.settings.toggleThemeMode();
+      dataManager.settings.setThemeMode = themeMode;
       dataManager.saveSettings();
     });
   }

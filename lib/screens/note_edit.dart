@@ -21,9 +21,9 @@ class _NoteEditPageState extends State<NoteEditPage> {
     _dataManager.loadNoteContent(widget.currentNote).then((value) {
       _controller.value = TextEditingValue(
         text: value.content,
-        selection: TextSelection.fromPosition(TextPosition(offset: value.content.length)),
-      ) ;
-
+        selection: TextSelection.fromPosition(
+            TextPosition(offset: value.content.length)),
+      );
     });
     super.initState();
   }
@@ -106,7 +106,6 @@ class _NoteEditPageState extends State<NoteEditPage> {
         },
         child: const Icon(Icons.save),
       ),
-      
     );
   }
 }
