@@ -11,7 +11,7 @@ import 'note.dart';
 class DataManager {
   //IMPLEMENT: Save/load each note seperately.
   Settings settings = Settings(themeMode: 1, enableAutoSave: true);
-  List<Note> notes = List<Note>.empty(growable: true);
+  Map<String, Note> notes = {};
   static DataManager instance = DataManager();
   late final Directory mainDirectory;
   String dirPath = '';
@@ -28,7 +28,7 @@ class DataManager {
     mainDirectory = directory;
     dirPath = directory.path;
     await loadSettings();
-    loadNotes();
+    _loadNotes();
     return directory.path;
   }
 
@@ -70,14 +70,28 @@ class DataManager {
   }
 
   Future<void> saveNote(Note note) async {
+    notes[note.name] = note;
     final file = _localFile("${note.name}.md");
     await file.writeAsString(jsonEncode(note));
   }
 
-  Future<List<Note>> loadNotes() async {
+  Future<void> deleteNote(String noteName) async {
+    notes.remove(noteName);
+    final file = _localFile("$noteName.md");
+    await file.delete();
+  }
+
+  Future<List<Note>> getNotes() async {
+    if (notes.isEmpty) {
+      return await _loadNotes();
+    } else {
+      return notes.values.toList();
+    }
+  }
+
+  Future<List<Note>> _loadNotes() async {
     final List<FileSystemEntity> entities = await mainDirectory.list().toList();
     final List<File> files = entities.whereType<File>().toList(growable: true);
-    List<Note> notes = List.empty(growable: true);
     for (File e in files) {
       String fileName = e.path.split(Platform.pathSeparator).last;
       final int dotIndex = fileName.lastIndexOf('.');
@@ -87,15 +101,16 @@ class DataManager {
         continue;
       }
       fileName = fileName.substring(0, dotIndex);
-      notes.add(Note(name: fileName));
+      notes[fileName] = Note(name: fileName);
     }
-    return notes;
+    return notes.values.toList();
   }
 
   Future<Note> loadNoteContent(Note note) async {
     final file = _localFile('${note.name}.md');
     final encodedJson = await file.readAsString();
     final decodedJson = jsonDecode(encodedJson);
+    notes[note.name] = note;
     return Note(name: note.name, content: decodedJson['content']);
   }
 
@@ -104,6 +119,12 @@ class DataManager {
     if (kDebugMode) {
       print(
           'SETTINGS\n-----\nTheme: ${settings.getThemeMode()}\nAuto Save Enabled: ${settings.enableAutoSave}\n-----');
+    }
+  }
+
+  void debugPrintNotes() {
+    if (kDebugMode) {
+      print('${notes.values}');
     }
   }
   //#endregion

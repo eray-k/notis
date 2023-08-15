@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:notis/models/data_manager.dart';
+import 'package:notis/models/temp.dart';
 import 'package:notis/screens/settings_page.dart';
+import 'package:notis/widgets/note_card_list.dart';
+
 import '../models/note.dart';
-import '../widgets/note_card.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -12,14 +16,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late final DataManager dataManager;
-
-  @override
-  void initState() {
-    super.initState();
-    dataManager = DataManager.instance;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,36 +51,39 @@ class _HomeState extends State<Home> {
               icon: const Icon(Icons.settings))
         ],
       ),
-      body: FutureBuilder<List<Note>>(
-        future: dataManager.loadNotes(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return noteListView(snapshot.data ?? List.empty());
-          } else if (snapshot.hasError) {
-            return Text('Error!: ${snapshot.error}');
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+      body: NoteCardList(
+        selectionModeChanged: selectionModeChanged,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          dataManager.saveNote(Note(name: 'aaa'));
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: Temp.selectionMode
+          ? FloatingActionButton(
+              onPressed: () {
+                setState(() {
+                  for (var i = 0; i < Temp.selectedNotes.length; i++) {
+                    DataManager.instance.deleteNote(Temp.selectedNotes[i]);
+                  }
+                  Temp.selectedNotes = List.empty(growable: true);
+                  selectionModeChanged(false);
+                });
+              },
+              child: const Icon(Icons.delete),
+            )
+          : FloatingActionButton(
+              onPressed: () {
+                final value = (Random().nextInt(9000) + 100).toString();
+                final note = Note(name: value);
+                setState(() {
+                  DataManager.instance.notes[value] = note;
+                });
+                DataManager.instance.saveNote(note);
+              },
+              child: const Icon(Icons.add),
+            ),
     );
   }
 
-  ListView noteListView(List<Note> notes) {
-    return ListView.builder(
-      itemCount: notes.length,
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      itemBuilder: (context, index) {
-        return NoteCardView(note: notes[index]);
-      },
-    );
+  selectionModeChanged(value) {
+    setState(() {
+      Temp.selectionMode = value;
+    });
   }
 }

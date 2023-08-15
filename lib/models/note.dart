@@ -3,6 +3,7 @@
 class Note {
   String name;
   String content;
+
   Note({required this.name, this.content = ''});
 
   @override
