@@ -72,7 +72,7 @@ class _HomeState extends State<Home> {
                 final value = (Random().nextInt(9000) + 100).toString();
                 final note = Note(name: value);
                 setState(() {
-                  DataManager.instance.notes[value] = note;
+                  DataManager.instance.saveNote(note);
                 });
                 DataManager.instance.saveNote(note);
               },

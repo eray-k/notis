@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:notis/models/temp.dart';
 import 'package:notis/screens/note_edit.dart';
+import 'package:notis/widgets/file_options.dart';
 
 import '../models/note.dart';
+import '../util/util.dart';
 
 class NoteCardView extends StatefulWidget {
   const NoteCardView({
@@ -37,7 +39,9 @@ class _NoteCardViewState extends State<NoteCardView> {
             : () {
                 //Open note edit page
                 Future.delayed(const Duration(milliseconds: 100), () {
-                  Navigator.of(context).push(routeBuilder());
+                  Navigator.of(context).push(slideInAnim(NoteEditPage(
+                    currentNote: widget.note,
+                  )));
                 });
               },
         onLongPress: Temp.selectionMode
@@ -53,29 +57,13 @@ class _NoteCardViewState extends State<NoteCardView> {
                 onChanged: null,
                 value: Temp.selectedNotes.contains(widget.note.name),
               )
-            : null,
+            : IconButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(slideInAnim(const FileOptionsView()));
+                },
+                icon: const Icon(Icons.more_horiz)),
       ),
-    );
-  }
-
-  PageRouteBuilder<dynamic> routeBuilder() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => NoteEditPage(
-        currentNote: widget.note,
-      ),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(0.0, 1.0);
-        const end = Offset.zero;
-        const curve = Curves.ease;
-        final tween =
-            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        final offsetAnimation = animation.drive(tween);
-
-        return SlideTransition(
-          position: offsetAnimation,
-          child: child,
-        );
-      },
     );
   }
 }

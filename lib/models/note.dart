@@ -1,7 +1,7 @@
 /// Main Note model
 // ignore_for_file: file_names
 class Note {
-  String name;
+  final String name;
   String content;
 
   Note({required this.name, this.content = ''});

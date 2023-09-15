@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:notis/models/settings.dart';
 import 'package:path_provider/path_provider.dart';
@@ -9,9 +8,8 @@ import 'note.dart';
 
 /// Save / Load Manager class.
 class DataManager {
-  //IMPLEMENT: Save/load each note seperately.
   Settings settings = Settings(themeMode: 1, enableAutoSave: true);
-  Map<String, Note> notes = {};
+  final Map<String, Note> _notes = {};
   static DataManager instance = DataManager();
   late final Directory mainDirectory;
   String dirPath = '';
@@ -48,7 +46,6 @@ class DataManager {
     await file.writeAsString(jsonEncode(settings));
   }
 
-  ///Always
   Future<Settings> loadSettings() async {
     final file = _localFile('settings.txt');
     final encodedJson = await file.readAsString();
@@ -69,23 +66,26 @@ class DataManager {
     return settings;
   }
 
+  ///- Saves note in json format with `***.md` extension
+  ///- Adds to stack, DOES NOT OVERWRITE if [note.name] can't be found
+  ///- Can be used to register empty note
   Future<void> saveNote(Note note) async {
-    notes[note.name] = note;
+    _notes[note.name] = note;
     final file = _localFile("${note.name}.md");
     await file.writeAsString(jsonEncode(note));
   }
 
   Future<void> deleteNote(String noteName) async {
-    notes.remove(noteName);
+    _notes.remove(noteName);
     final file = _localFile("$noteName.md");
     await file.delete();
   }
 
   Future<List<Note>> getNotes() async {
-    if (notes.isEmpty) {
+    if (_notes.isEmpty) {
       return await _loadNotes();
     } else {
-      return notes.values.toList();
+      return _notes.values.toList();
     }
   }
 
@@ -101,17 +101,18 @@ class DataManager {
         continue;
       }
       fileName = fileName.substring(0, dotIndex);
-      notes[fileName] = Note(name: fileName);
+      _notes[fileName] = Note(name: fileName);
     }
-    return notes.values.toList();
+    return _notes.values.toList();
   }
 
   Future<Note> loadNoteContent(Note note) async {
     final file = _localFile('${note.name}.md');
     final encodedJson = await file.readAsString();
     final decodedJson = jsonDecode(encodedJson);
-    notes[note.name] = note;
-    return Note(name: note.name, content: decodedJson['content']);
+    note.content = decodedJson['content'];
+    _notes[note.name] = note;
+    return note;
   }
 
   //#region DEBUG METHODS
@@ -124,7 +125,7 @@ class DataManager {
 
   void debugPrintNotes() {
     if (kDebugMode) {
-      print('${notes.values}');
+      print('${_notes.values}');
     }
   }
   //#endregion
