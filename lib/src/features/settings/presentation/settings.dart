@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:notis/main.dart';
-import 'package:notis/models/data_manager.dart';
-import 'package:notis/models/settings.dart';
-import 'package:notis/util/util.dart';
-import 'package:notis/widgets/custom_popup.dart';
+import 'package:notis/src/common/domain/models/data_manager.dart';
+import 'package:notis/src/common/domain/models/settings.dart';
+import 'package:notis/src/common/constants/utils.dart';
+import 'package:notis/src/common/presentation/ui/widgets/modal_dialogs/option_dialog.dart';
 
-class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+class Settings extends StatefulWidget {
+  const Settings({super.key});
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  State<Settings> createState() => _SettingsState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsState extends State<Settings> {
   late final DataManager _dataManager;
   @override
   void initState() {
@@ -93,7 +93,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 onPressed: () {
                   showDialog(
                       context: context,
-                      builder: (context) => CustomPopUp(
+                      builder: (context) => OptionDialog(
                             title: title,
                             options: values.keys.toList(),
                             selected: current,

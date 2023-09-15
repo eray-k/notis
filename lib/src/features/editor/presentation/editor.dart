@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:notis/models/data_manager.dart';
-import 'package:notis/util/util.dart' as util;
+import 'package:notis/src/common/domain/models/data_manager.dart';
+import 'package:notis/src/common/constants/utils.dart' as util;
 
-import '../models/note.dart';
+import '../../../common/domain/models/note.dart';
 
 enum SaveStatus { done, ongoing, changed }
 

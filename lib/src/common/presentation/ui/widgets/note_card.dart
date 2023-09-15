@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:notis/models/temp.dart';
-import 'package:notis/screens/note_edit.dart';
-import 'package:notis/widgets/file_options.dart';
+import 'package:notis/src/common/domain/models/temp.dart';
+import 'package:notis/src/features/editor/presentation/editor.dart';
+import 'package:notis/src/features/file_details/presentation/file_details.dart';
 
-import '../models/note.dart';
-import '../util/util.dart';
+import '../../../domain/models/note.dart';
+import '../../../constants/utils.dart';
 
 class NoteCardView extends StatefulWidget {
   const NoteCardView({
@@ -59,8 +59,7 @@ class _NoteCardViewState extends State<NoteCardView> {
               )
             : IconButton(
                 onPressed: () {
-                  Navigator.of(context)
-                      .push(slideInAnim(const FileOptionsView()));
+                  Navigator.of(context).push(slideInAnim(const FileDetails()));
                 },
                 icon: const Icon(Icons.more_horiz)),
       ),

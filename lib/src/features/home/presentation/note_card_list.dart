@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:notis/models/data_manager.dart';
-import 'package:notis/widgets/note_card.dart';
+import 'package:notis/src/common/domain/models/data_manager.dart';
+import 'package:notis/src/common/presentation/ui/widgets/note_card.dart';
 
-import '../models/note.dart';
-import '../models/temp.dart';
+import '../../../common/domain/models/note.dart';
+import '../../../common/domain/models/temp.dart';
 
 class NoteCardList extends StatefulWidget {
   const NoteCardList({super.key, required this.selectionModeChanged});

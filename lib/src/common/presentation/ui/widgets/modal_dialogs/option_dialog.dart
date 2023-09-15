@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CustomPopUp extends StatefulWidget {
-  const CustomPopUp(
+class OptionDialog extends StatefulWidget {
+  const OptionDialog(
       {super.key,
       required this.title,
       required this.options,
@@ -10,10 +10,10 @@ class CustomPopUp extends StatefulWidget {
   final List<String> options;
   final String selected;
   @override
-  State<CustomPopUp> createState() => _CustomPopUpState();
+  State<OptionDialog> createState() => _OptionDialogState();
 }
 
-class _CustomPopUpState extends State<CustomPopUp> {
+class _OptionDialogState extends State<OptionDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(

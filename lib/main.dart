@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:notis/models/data_manager.dart';
-import 'package:notis/screens/home.dart';
-import 'package:notis/util/themes.dart';
-
-import 'models/settings.dart';
+import 'package:notis/src/features/home/presentation/home.dart';
+import 'package:notis/src/common/common.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final DataManager dataManager = DataManager.instance;
   await dataManager.init();
-  final Settings settings = dataManager.settings;
+  final SettingsConfig settings = dataManager.settings;
   dataManager.debugPrintSettings();
 
   runApp(MyApp(
@@ -20,7 +17,7 @@ main() async {
 class MyApp extends StatefulWidget {
   const MyApp({super.key, required this.settings});
 
-  final Settings settings;
+  final SettingsConfig settings;
   @override
   State<MyApp> createState() => MyAppState();
 

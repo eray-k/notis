@@ -1,12 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:notis/models/data_manager.dart';
-import 'package:notis/models/temp.dart';
-import 'package:notis/screens/settings_page.dart';
-import 'package:notis/widgets/note_card_list.dart';
-
-import '../models/note.dart';
+import 'package:notis/src/common/common.dart';
+import 'package:notis/src/features/settings/presentation/settings.dart';
+import 'package:notis/src/features/home/presentation/note_card_list.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -45,7 +42,7 @@ class _HomeState extends State<Home> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const SettingsPage(),
+                      builder: (context) => const Settings(),
                     ));
               },
               icon: const Icon(Icons.settings))

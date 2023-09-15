@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class FileOptionsView extends StatefulWidget {
-  const FileOptionsView({super.key});
+class FileDetails extends StatefulWidget {
+  const FileDetails({super.key});
 
   @override
-  State<FileOptionsView> createState() => _FileOptionsViewState();
+  State<FileDetails> createState() => _FileDetailsState();
 }
 
-class _FileOptionsViewState extends State<FileOptionsView> {
+class _FileDetailsState extends State<FileDetails> {
   @override
   Widget build(BuildContext context) {
     return Material(
