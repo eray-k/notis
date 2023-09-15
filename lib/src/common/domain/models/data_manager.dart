@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:notis/models/settings.dart';
+import 'package:notis/src/common/domain/models/settings.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'note.dart';
 
 /// Save / Load Manager class.
 class DataManager {
-  Settings settings = Settings(themeMode: 1, enableAutoSave: true);
+  SettingsConfig settings = SettingsConfig(themeMode: 1, enableAutoSave: true);
   final Map<String, Note> _notes = {};
   static DataManager instance = DataManager();
   late final Directory mainDirectory;
@@ -46,7 +46,7 @@ class DataManager {
     await file.writeAsString(jsonEncode(settings));
   }
 
-  Future<Settings> loadSettings() async {
+  Future<SettingsConfig> loadSettings() async {
     final file = _localFile('settings.txt');
     final encodedJson = await file.readAsString();
     if (encodedJson == "") {
@@ -54,7 +54,7 @@ class DataManager {
     }
     final decodedJson = jsonDecode(encodedJson);
     try {
-      settings = Settings(
+      settings = SettingsConfig(
           themeMode: decodedJson['themeMode'],
           enableAutoSave: decodedJson['enableAutoSave']);
     } catch (e) {
